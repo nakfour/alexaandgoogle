@@ -8,10 +8,16 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 })
 
-
 //
 //  search twitter for all tweets containing the word 'banana' since July 11, 2011
 //
-T.get('search/tweets', { q: '#predict452bot', count: 100 }, function(err, data, response) {
-  console.log(data)
-})
+var getTweets = function() {
+
+    T.get('search/tweets', { q: '#predict452bot', count: 100 }, function(err, data, response) {
+    console.log(data)
+    return data;
+    })
+};
+
+
+module.exports.getTweets = getTweets;
