@@ -48,6 +48,6 @@ app.post('/', function (req, res) {
 //var httpsServer = https.createServer(options, app);
 var httpServer = http.createServer(app);
 //httpsServer.listen(REST_PORT, SERVER_IP,function () {
-httpServer.listen(8080,function () {
+httpServer.listen(443,function () {
     console.log('Alexa  ill service ready on 8080 via https. Be happy!');
 });
