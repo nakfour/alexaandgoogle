@@ -1,177 +1,53 @@
-//  OpenShift sample Node application
-var express = require('express'),
-    bodyParser = require('body-parser'),
-    fs      = require('fs'),
-    cors = require('cors')
-    app     = express(),
-    eps     = require('ejs'),
-    dbManager = require ('./mongodbmanager')
-    morgan  = require('morgan');
-   //twitter = require('./twitter.js')
-    
-Object.assign=require('object-assign')
+'use strict';
 
-app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'));
-app.use(cors());
-app.use(bodyParser.json());
+const express         = require('express');
+const https           = require('https');
+const http           = require('http');
+const fs              = require('fs');
+const bodyParser      = require('body-parser');
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
-    mongoURLLabel = "";
+const SERVER_PORT     = 443;
+//const SERVER_IP       = <YOUR_IP>;
 
-/*if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
-  var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase(),
-      mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
-      mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
-      mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
-      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
-      mongoUser = process.env[mongoServiceName + '_USER'];
+// SSL Certificate stuff for https
+/*var privateKey  = fs.readFileSync(<PATH TO YOUR privateKey file>, 'utf8');
+var certificate = fs.readFileSync(<PATH TO YOUR certificate file>, 'utf8');
+var ca = fs.readFileSync(<PATH TO YOUR crt file>).toString();
+var options = {key: privateKey, cert: certificate,ca:ca};*/
 
-  if (mongoHost && mongoPort && mongoDatabase) {
-    mongoURLLabel = mongoURL = 'mongodb://';
-    if (mongoUser && mongoPassword) {
-      mongoURL += mongoUser + ':' + mongoPassword + '@';
-    }
-    // Provide UI label that excludes user id and pw
-    mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
-    mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
+const app = express();
 
-  }
-}*/
+app.use(bodyParser.json({ type: 'application/json' }));
 
-dbManager.initDb(function(err) {
-    if(err!=null) {
-        console.log(err);
-    } else
-    {
-        /*dbManager.createMembership (function(err) {
-          console.log(err);
-        });*/
-        console.log("Database Inialization Success");
-    }
+// your service will be available on <YOUR_IP>/alexa
+app.post('/alexa/', function (req, res) {
+    console.log("Got a post request on /alexa");
+    console.log("req.body");
+    console.log(req.body);
+  /*  var ctx = context();
+    lambda.handler(req.body,ctx);
+    ctx.Promise
+        .then(resp => {  return res.status(200).json(resp); })
+        .catch(err => {  console.log(err);//add your error handling stuff })*/
+    return res.status(200);
 });
-/*app.get('/', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  console.log("Getting a / route request");
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    var col = db.collection('counts');
-    // Create a document with request IP and current time of request
-    col.insert({ip: req.ip, date: Date.now()});
-    col.count(function(err, count){
-      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
-    });
-  } else {
-    res.render('index.html', { pageCountMessage : null});
-  }
-});*/
 
-/*app.get('/pagecount', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    db.collection('counts').count(function(err, count ){
-      res.send('{ pageCount: ' + count + '}');
-    });
-  } else {
-    res.send('{ pageCount: -1 }');
-  }
-});*/
-
-
-//// GET ALL TWEETS
-/*app.get('/tweets', function (req, res, next) {
-  var dataFromTwitter= twitter.getTweets()
-  res.json({msg: dataFromTwitter})
-})*/
-
-// Enable CORS
-/*app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});*/
-
-//POST mobile sensor data
-app.post('/membership', function (req, res, next) {
-  console.log("Received post membership with data: ");
-  dbManager.createMembership(req.body,function(err) {
-    if(err) {
-        res.status(400).send('Bad Data');
-    }
-    else {
-        res.status(200).send('Success');
-    }
-  });
-
-
-})
-
-//POST mobile sensor data
-app.post('/startrental', function (req, res, next) {
-  console.log("Received post startrental: ");
-  dbManager.createRental(req.body,function(err) {
-    if(err) {
-        res.status(400).send('Bad Data');
-    }
-    else {
-        res.status(200).send('Success');
-    }
-  });
-})
-
-//POST mobile sensor data
-app.post('/stoprental', function (req, res, next) {
-  console.log("Received post stoprental with data: ");
-  dbManager.updateRental(req.body,function(err) {
-    if(err) {
-        res.status(400).send('Bad Data');
-    }
-    else {
-        res.status(200).send('Success');
-    }
-  });
-
-})
-
-app.get('/membership', function (req, res, next) {
-  //res.json({msg: "No Data"})
-  res.status(200).send('Empty Data');
-})
-
-
-//GET mobile sensor data
-/*app.get('/sensordata', function (req, res, next) {
-  //res.json({msg: "No Data"})
-  res.status(200).send('Empty Data');
-})*/
-
-// error handling
-app.use(function(err, req, res, next){
-  console.error(err.stack);
-  res.status(500).send('Something bad happened!');
+app.post('/', function (req, res) {
+    console.log("Got a post request on /");
+    console.log("req.body");
+        console.log(req.body);
+  /*  var ctx = context();
+    lambda.handler(req.body,ctx);
+    ctx.Promise
+        .then(resp => {  return res.status(200).json(resp); })
+        .catch(err => {  console.log(err);//add your error handling stuff })*/
+    return res.status(200);
 });
 
 
-app.listen(port, ip);
-console.log("Server Ready");
-console.log('Server running on http://%s:%s', ip, port);
-
-function shutdown () {
-    console.log( "Closing Database.");
-    dbManager.closeDB();
-    process.exit();
-}
-
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
-
-module.exports = app ;
+//var httpsServer = https.createServer(options, app);
+var httpServer = http.createServer(app);
+//httpsServer.listen(REST_PORT, SERVER_IP,function () {
+httpServer.listen(8080,function () {
+    console.log('Alexa  ill service ready on 8080 via https. Be happy!');
+});
