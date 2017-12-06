@@ -42,7 +42,9 @@ app.post('/alexa/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200).send(JSON.stringify(alexa_response));
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(alexa_response));
+    //return res.status(200).setHeader('Content-Type', 'application/json').send(JSON.stringify(alexa_response));
 });
 
 app.post('/', function (req, res) {
@@ -54,7 +56,9 @@ app.post('/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200).send(JSON.stringify(alexa_response));
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(alexa_response));
+    //return res.status(200).setHeader('Content-Type', 'application/json').send(JSON.stringify(alexa_response));
 });
 
 
@@ -67,7 +71,7 @@ app.get('/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200).send('Empty Data');;
+    return res.status(200).send('Empty Data');
 });
 
 //var httpsServer = https.createServer(options, app);
