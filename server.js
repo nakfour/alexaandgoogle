@@ -29,7 +29,7 @@ app.post('/alexa/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200);
+    return res.status(200).send('Empty Data');;
 });
 
 app.post('/', function (req, res) {
@@ -41,7 +41,7 @@ app.post('/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200);
+    return res.status(200).send('Empty Data');;
 });
 
 
@@ -54,7 +54,7 @@ app.get('/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200);
+    return res.status(200).send('Empty Data');;
 });
 
 //var httpsServer = https.createServer(options, app);
