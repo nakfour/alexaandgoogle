@@ -45,6 +45,18 @@ app.post('/', function (req, res) {
 });
 
 
+app.get('/', function (req, res) {
+    console.log("Got a GET request on /");
+    console.log("req.body");
+        console.log(req.body);
+  /*  var ctx = context();
+    lambda.handler(req.body,ctx);
+    ctx.Promise
+        .then(resp => {  return res.status(200).json(resp); })
+        .catch(err => {  console.log(err);//add your error handling stuff })*/
+    return res.status(200);
+});
+
 //var httpsServer = https.createServer(options, app);
 var httpServer = http.createServer(app);
 //httpsServer.listen(REST_PORT, SERVER_IP,function () {
