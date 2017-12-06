@@ -18,6 +18,19 @@ var options = {key: privateKey, cert: certificate,ca:ca};*/
 const app = express();
 
 app.use(bodyParser.json({ type: 'application/json' }));
+var alexa_response= {
+                      "version": "1.0",
+                      "sessionAttributes": {
+                      },
+                      "response": {
+                        "outputSpeech": {
+                          "type": "PlainText",
+                          "text": "Thank you fo asking"
+                        },
+                        "shouldEndSession": true
+                      }
+                    };
+
 
 // your service will be available on <YOUR_IP>/alexa
 app.post('/alexa/', function (req, res) {
@@ -29,7 +42,7 @@ app.post('/alexa/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200).send('Empty Data');;
+    return res.status(200).send(JSON.stringify(alexa_response));
 });
 
 app.post('/', function (req, res) {
@@ -41,7 +54,7 @@ app.post('/', function (req, res) {
     ctx.Promise
         .then(resp => {  return res.status(200).json(resp); })
         .catch(err => {  console.log(err);//add your error handling stuff })*/
-    return res.status(200).send('Empty Data');;
+    return res.status(200).send(JSON.stringify(alexa_response));
 });
 
 
